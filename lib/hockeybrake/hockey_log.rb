@@ -55,8 +55,10 @@ module HockeyBrake
         end
         # add the optional values if possible
         begin
-          output += "Android: #{RUBY_PLATFORM}\n"
-          output += "Model: #{hostname} Ruby #{RUBY_VERSION} Rails #{Rails.version}\n"
+          output += "Model: #{hostname}\n"
+          output += "OS: #{RUBY_PLATFORM}\n"
+          output += "Ruby: #{RUBY_VERSION}\n"
+          output += "Rails: #{Rails.version}\n"
         rescue
           # nothing to do
         end
