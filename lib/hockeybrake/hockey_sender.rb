@@ -18,9 +18,11 @@ module HockeyBrake
 
       # generate the log
       logstr = HockeyLog.generate_safe(data)
+      description = data.send(:to_s)
 
       # generate the stirng io
       logio = StringIO.new(logstr)
+      descio = StringIO.new(description)
 
       # buidl the url
       url = URI.parse(HockeyBrake.configuration.hockey_url)
@@ -29,7 +31,10 @@ module HockeyBrake
       response = begin
 
                    # build the request
-        req = Net::HTTP::Post::Multipart.new( url.path, "log" => UploadIO.new(logio, 'application/octet-stream', "log.txt") )
+        req = Net::HTTP::Post::Multipart.new( url.path, {
+          "log" => UploadIO.new(logio, 'application/octet-stream', "log.txt"),
+          "description" => UploadIO.new(descio, 'application/octet-stream', "description.txt") 
+        })
 
         # start the upload
         Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme == 'https') do |http|

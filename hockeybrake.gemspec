@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency(%q<airbrake>, ["~> 3.1", ">= 3.1.2"])
   s.add_runtime_dependency(%q<multipart-post>, ['~> 1.1', ">= 1.1.5"])
-  s.add_runtime_dependency(%q<activesupport>, ['~> 0'])
+  s.add_runtime_dependency(%q<activesupport>, ['~> 3.2'])
 end
