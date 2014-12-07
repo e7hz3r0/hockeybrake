@@ -9,10 +9,12 @@ module HockeyBrake
     #
     # Generates a string which can be sent to the hockey service
     def self.generate_safe(data)
+      output = ""
+
       begin
         output = HockeyLog.generate(data)
       rescue HockeyBrake::HockeyLogException => e
-        output += e.message
+        output += e.message.to_s
       end
 
       # go ahead
