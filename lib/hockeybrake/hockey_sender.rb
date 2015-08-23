@@ -18,7 +18,7 @@ module HockeyBrake
 
       # generate the log
       logstr = HockeyLog.generate_safe(data)
-      description = data.send(:to_s)
+      description = (data.respond_to?(:to_json) ? data.send(:to_json) : data.send(:to_s))
 
       # generate the stirng io
       logio = StringIO.new(logstr)
