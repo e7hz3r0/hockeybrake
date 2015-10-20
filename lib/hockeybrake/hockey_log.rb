@@ -92,12 +92,14 @@ module HockeyBrake
 
       # generate the call stacke
       data.backtrace.lines.each do |line|
-        class_name =   File.basename(line.file, ".rb").classify
+        if line.file.present?
+          class_name =   File.basename(line.file, ".rb").classify
 
-        begin
-          output += "    at #{class_name}.#{line.method}(#{line.file}:#{line.number})\n"
-        rescue
-          output += "    at #{class_name}.#{line.method_name}(#{line.file}:#{line.number})\n"
+          begin
+            output += "    at #{class_name}.#{line.method}(#{line.file}:#{line.number})\n"
+          rescue
+            output += "    at #{class_name}.#{line.method_name}(#{line.file}:#{line.number})\n"
+          end
         end
       end
 
