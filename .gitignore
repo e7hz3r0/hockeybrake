@@ -12,3 +12,6 @@ Thumbs.db
 .idea/
 Gemfile.lock
 *.gem
+*.swp
+*.swo
+vendor/
