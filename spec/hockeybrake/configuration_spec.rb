@@ -9,9 +9,9 @@ describe 'Hockeybrake configuration' do
       config.app_version="test"
     end
 
-    HockeyBrake.configuration.app_bundle_id.should eq('com.test.app')
-    HockeyBrake.configuration.app_id.should eq('secret')
-    HockeyBrake.configuration.app_version.should eq('test')
+    expect(HockeyBrake.configuration.app_bundle_id).to eq('com.test.app')
+    expect(HockeyBrake.configuration.app_id).to eq('secret')
+    expect(HockeyBrake.configuration.app_version).to eq('test')
   end
 
   it 'accepts resque specific settings' do
@@ -19,7 +19,7 @@ describe 'Hockeybrake configuration' do
       config.no_resque_handler = true
     end
 
-    HockeyBrake.configuration.no_resque_handler.should be_true
+    expect(HockeyBrake.configuration.no_resque_handler).to be true
   end
 
 end

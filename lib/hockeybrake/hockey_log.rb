@@ -88,17 +88,20 @@ module HockeyBrake
       output = ""
 
       # write the first line
-      output += "#{data.error_message}\n"
+      data[:errors].each do |error|
+        output += "#{data[:message]}\n"
 
-      # generate the call stacke
-      data.backtrace.lines.each do |line|
-        if line.file.present?
-          class_name =   File.basename(line.file, ".rb").classify
+        # generate the call stacke
+        error[:backtrace].each do |line|
+          if line.has_key? :file
+            class_name =   File.basename(line[:file], ".rb").classify
 
-          begin
-            output += "    at #{class_name}.#{line.method}(#{line.file}:#{line.number})\n"
-          rescue
-            output += "    at #{class_name}.#{line.method_name}(#{line.file}:#{line.number})\n"
+            begin
+              output += "    at #{class_name}.#{line[:method]}(#{line[:file]}:#{line[:number]})\n"
+            rescue
+              #FIXME this _was_ method_name not method...
+              output += "    at #{class_name}.#{line[:method]}(#{line[:file]}:#{line[:number]})\n"
+            end
           end
         end
       end

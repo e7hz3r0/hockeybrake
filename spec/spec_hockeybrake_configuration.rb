@@ -1,5 +1,7 @@
 Airbrake.configure do |config|
-  config.development_environments.delete("test")
+  config.ignore_environments.delete("test")
+  config.project_key = ''
+  config.project_id = 0
 end
 
 HockeyBrake.configure do |config|

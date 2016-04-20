@@ -4,7 +4,7 @@ require 'airbrake'
 
 module HockeyBrake
   # Sends out the notice to HockeyApp
-  class HockeySender < Airbrake::Sender
+  class HockeySender < Airbrake::AsyncSender
 
     # initialize the sender
     def initialize
