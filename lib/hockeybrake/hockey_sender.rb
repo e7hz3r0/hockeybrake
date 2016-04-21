@@ -4,17 +4,17 @@ require 'airbrake'
 
 module HockeyBrake
   # Sends out the notice to HockeyApp
-  class HockeySender < Airbrake::AsyncSender
+  class HockeySender < Airbrake::SyncSender
 
     # initialize the sender
     def initialize
-      super(Airbrake.configuration.to_hash)
+      super(Airbrake.configuration)
     end
 
     # Sends the notice data off to HockeyApp for processing.
     #
     # @param [String] data The XML notice to be sent off
-    def send_to_airbrake(data)
+    def send(data)
 
       # generate the log
       logstr = HockeyLog.generate_safe(data)
@@ -42,15 +42,15 @@ module HockeyBrake
         end
 
       rescue *HTTP_ERRORS => e
-        log_internal  :level => :error, :message => "Unable to contact the HockeyApp server. HTTP Error=#{e}"
+        log_internal  :level => Logger::ERROR, :message => "Unable to contact the HockeyApp server. HTTP Error=#{e}"
         nil
       end
 
       case response
         when Net::HTTPSuccess then
-          log_internal  :level => :info, :message => "Success: #{response.class}", :response => response
+          log_internal  :level => Logger::INFO, :message => "Success: #{response.class}", :response => response
         else
-          log_internal  :level => :error, :message => "Failure: #{response.class}", :response => response
+          log_internal  :level => Logger::ERROR, :message => "Failure: #{response.class}", :response => response
       end
 
       if response && response.respond_to?(:body)
@@ -58,14 +58,14 @@ module HockeyBrake
         error_id[1] if error_id
       end
     rescue Exception => e
-      log_internal  :level => :error,  :message => "[HockeyBrake::HockeySender#send_to_airbrake] Cannot send notification. Error: #{e.class} - #{e.message}\nBacktrace:\n#{e.backtrace.join("\n\t")}"
+      log_internal  :level => Logger::ERROR,  :message => "[HockeyBrake::HockeySender#send_to_airbrake] Cannot send notification. Error: #{e.class} - #{e.message}\nBacktrace:\n#{e.backtrace.join("\n\t")}"
       nil
     end
 
     def log_internal(options = {})
-      log options
+      @config.logger.log options[:level], options[:message]
     rescue
-      log options[:level], options[:message], options[:response]
+      @config.logger.log options[:level], options[:message], options[:response]
     end
   end
 end

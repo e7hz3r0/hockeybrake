@@ -1,14 +1,20 @@
 module HockeyBrake
   module HockeySenderInjector
-    def override_send_to_airbrake(data)
-      HockeyBrake::HockeySender.new().send_to_airbrake(data)
+    def override_send(data)
+      HockeyBrake::HockeySender.new().send(data)
     end
   end
 end
 
 module Airbrake
-  class Sender
+  class SyncSender
     include HockeyBrake::HockeySenderInjector
-    alias_method :send_to_airbrake, :override_send_to_airbrake
+    alias_method :send, :override_send
+  end
+end
+
+module Airbrake
+  def self.configuration
+    @notifiers[:default].instance_variable_get(:@config)
   end
 end
