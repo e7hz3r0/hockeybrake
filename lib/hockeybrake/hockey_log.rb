@@ -89,7 +89,7 @@ module HockeyBrake
 
       # write the first line
       data[:errors].each do |error|
-        output += "#{data[:message]}\n"
+        output += "#{error[:message]}\n"
 
         # generate the call stacke
         error[:backtrace].each do |line|
@@ -97,10 +97,10 @@ module HockeyBrake
             class_name =   File.basename(line[:file], ".rb").classify
 
             begin
-              output += "    at #{class_name}.#{line[:method]}(#{line[:file]}:#{line[:number]})\n"
+              output += "    at #{class_name}.#{line[:function]}(#{line[:file]}:#{line[:line]})\n"
             rescue
               #FIXME this _was_ method_name not method...
-              output += "    at #{class_name}.#{line[:method]}(#{line[:file]}:#{line[:number]})\n"
+              output += "    at #{class_name}.#{line[:function]}(#{line[:file]}:#{line[:line]})\n"
             end
           end
         end
