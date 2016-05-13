@@ -35,7 +35,7 @@ module HockeyBrake
         begin
           Sidekiq.configure_server do |config|
             config.error_handlers << Proc.new { |ex,ctx_hash|
-              ::Airbrake.notify_or_ignore(ex, :parameters => ctx_hash)
+              ::Airbrake.notify(ex, :parameters => ctx_hash)
             }
           end
         end
